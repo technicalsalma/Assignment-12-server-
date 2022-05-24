@@ -63,6 +63,14 @@ async function run(){
             res.send(result)
         });
 
+  app.get('/orders', async (req, res) => {
+        const customerEmail = req.query.email;
+        const authorization = req.headers.authorization;
+        console.log('auth header', authorization);
+        const query = { customerEmail: customerEmail };
+        const order = await orderCollection.find(query).toArray();
+        res.send(order);
+  })
 
   }
   finally{
