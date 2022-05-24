@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const jwt = require("jsonwebtoken");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
@@ -25,6 +26,7 @@ async function run(){
     await client.connect();
    const productCollection = client.db('drill_machine').collection('Products')
    const orderCollection = client.db("drill_machine").collection("orders");
+   const userCollection = client.db("drill_machine").collection("users");
 
 
   app.get('/product', async(req, res) =>{
@@ -34,7 +36,17 @@ async function run(){
     res.send(products);
   }) 
 
-   
+  app.put('/user/:email', async(req,res) =>{
+    const email = req.params.email;
+    const user = req.body;
+    const filter = {email:email}
+    const options= {upsert: true};
+    const updateDoc = {
+      $set: user,
+    };
+    const result = await userCollection.updateOne(filter, updateDoc,options);
+    res.send(result)
+  }) 
 
   
   app.get('/product/:id', async(req, res) =>{
