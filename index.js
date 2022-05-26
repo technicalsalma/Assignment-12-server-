@@ -182,17 +182,7 @@ async function run(){
       }
     });
 
-     app.get("/order", verifyJWT, async (req, res) => {
-      const customerEmail = req.query.email;
-      const decodedEmail = req.decoded.email;
-      if (customerEmail === decodedEmail) {
-        const query = { customerEmail: customerEmail };
-        const order = await orderCollection.find(query).toArray();
-        res.send(order);
-      } else {
-        return res.status(403).send({ message: "forbidden access" });
-      }
-    });
+     
 
     //===== pay order=======//
     app.get('/orders/:id', verifyJWT, async(req, res)=>{
